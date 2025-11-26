@@ -1,327 +1,342 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <title>推しライト LIVE!!</title>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
-    />
-    <meta
-      name="description"
-      content="推しライトLIVE!! - 地下アイドル現場のレスをもらう瞬間を再現するミニリズムゲーム"
-    />
-    <link rel="stylesheet" href="styles/base.css" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
 
-  <body>
-    <button
-      id="toggleBgmBtn"
-      class="bgm-toggle"
-      type="button"
-      aria-label="BGMのミュート切り替え"
-    >
-      🔊
-    </button>
-    <div class="app-shell">
-      <header class="hero">
-        <div class="lang-switcher" id="lang-switcher">
-          <button class="lang-switcher__btn" type="button" data-lang="ja">
-            日本語
+<head>
+  <meta charset="UTF-8" />
+  <title>推しライト LIVE!!</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="description" content="推しライトLIVE!! - 地下アイドル現場のレスをもらう瞬間を再現するミニリズムゲーム" />
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <button id="toggleBgmBtn" class="bgm-toggle" type="button" aria-label="BGMのミュート切り替え">
+    🔊
+  </button>
+  <div class="app-shell">
+    <header class="hero">
+      <div class="lang-switcher" id="lang-switcher">
+        <button class="lang-switcher__btn" type="button" data-lang="ja">
+          日本語
+        </button>
+        <button class="lang-switcher__btn" type="button" data-lang="en">
+          EN
+        </button>
+        <button class="lang-switcher__btn" type="button" data-lang="ko">
+          한국어
+        </button>
+      </div>
+      <div class="hero__overlay"></div>
+      <h1 class="hero__title" data-i18n="hero.title">推しライト LIVE!!</h1>
+      <p class="hero__subtitle" data-i18n="hero.subtitle">
+        ペンライトを合わせて推しからレスをもらおう！
+      </p>
+    </header>
+
+    <main class="screen screen--top" id="screen-top">
+      <section class="top-actions">
+        <button class="cta-button" id="btn-start" data-i18n="top.start">
+          ゲームスタート
+        </button>
+        <button class="cta-button cta-button--outline" id="btn-howto" data-i18n="top.howto">
+          操作説明
+        </button>
+        <button class="cta-button cta-button--ghost" id="btn-ranking" data-i18n="top.ranking">
+          ランキングを見る（近日公開）
+        </button>
+      </section>
+
+      <section class="settings">
+        <h2 class="section-title" data-i18n="settings.title">難易度・設定</h2>
+        <div class="settings__group">
+          <label class="mode-card">
+            <input type="radio" name="mode" value="easy" class="mode-card__radio" checked />
+            <div class="mode-card__content">
+              <h3 data-i18n="mode.easy.title">🔰EASY</h3>
+              <p data-i18n="mode.easy.desc">+6点／色見本付き練習モード！</p>
+            </div>
+          </label>
+
+          <label class="mode-card">
+            <input type="radio" name="mode" value="normal" class="mode-card__radio" />
+            <div class="mode-card__content">
+              <h3 data-i18n="mode.normal.title">⚡NORMAL</h3>
+              <p data-i18n="mode.normal.desc">+10点／色順を覚えてガチ勝負！</p>
+            </div>
+          </label>
+
+          <label class="mode-card">
+            <input type="radio" name="mode" value="hard" class="mode-card__radio" />
+            <div class="mode-card__content">
+              <h3 data-i18n="mode.hard.title">🔥HARD</h3>
+              <p data-i18n="mode.hard.desc">+13点／ボタンの故障を乗り越え高得点を狙え！</p>
+            </div>
+          </label>
+        </div>
+      </section>
+
+      <section class="howto-modal" id="howto-modal" hidden>
+        <div class="howto-modal__backdrop"></div>
+        <div class="howto-modal__content">
+          <button class="modal-close" id="btn-close-howto">×</button>
+          <h2 class="howto-modal__title" data-i18n="howto.title">🎮 操作ガイド</h2>
+
+          <section class="howto-modal__section">
+            <h3 data-i18n="howto.section.basics.title">⭐ 基本操作</h3>
+            <ul class="howto-modal__list">
+              <li data-i18n="howto.section.basics.item1">・スタート後に「TARGET COLOR」を確認。</li>
+              <li data-i18n="howto.section.basics.item2">・左右ボタンでペンライトの色を切り替え、「TARGET COLOR」と一致させると得点が入ります。</li>
+              <li data-i18n="howto.section.basics.item3">・2秒以内に3回成功すると「アピールタイム」に突入します。</li>
+            </ul>
+          </section>
+
+          <section class="howto-modal__section">
+            <h3 data-i18n="howto.section.fever.title">⭐ アピールタイム</h3>
+            <ul class="howto-modal__list">
+              <li data-i18n="howto.section.fever.item1">・左右スワイプでペンライトを振ると10 回ごとに +10pt を獲得、さらに推しのレス演出もレベルアップします。</li>
+              <li data-i18n="howto.section.fever.item2">・アピールタイムは 10 秒間続き、その間メインタイマーは停止します。</li>
+              <li data-i18n="howto.section.fever.item3">・終了後は自動で通常モードに戻ります。</li>
+            </ul>
+          </section>
+
+          <section class="howto-modal__section">
+            <h3 data-i18n="howto.section.scoring.title">⭐ 通常モードの得点（1回成功ごと）</h3>
+            <ul class="howto-modal__list">
+              <li data-i18n="howto.section.scoring.item1">・EASY：+6pt</li>
+              <li data-i18n="howto.section.scoring.item2">・NORMAL：+10pt</li>
+              <li data-i18n="howto.section.scoring.item3">・HARD：+13pt</li>
+            </ul>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <main class="screen screen--play" id="screen-play" hidden>
+      <section class="hud">
+        <div class="hud__item">
+          <span class="hud__label" data-i18n="hud.scoreLabel">スコア</span>
+          <span class="hud__value" id="hud-score">0000</span>
+        </div>
+        <div class="hud__item hud__item--timer" id="hud-timer-item">
+          <span class="hud__label" data-i18n="hud.timeLabel">残り時間</span>
+          <span class="hud__value hud__value--time" id="hud-time">40</span>
+        </div>
+        <div class="hud__item">
+          <span class="hud__label" data-i18n="hud.successLabel">成功回数</span>
+          <span class="hud__value" id="hud-success">0</span>
+        </div>
+      </section>
+
+      <section class="stage">
+        <div class="stage__target">
+          <h2 data-i18n="target.title">TARGET COLOR</h2>
+          <div class="color-card" id="target-color">
+            <div class="color-card__swatch"></div>
+            <p class="color-card__name">RED</p>
+          </div>
+          <div id="appeal-image-area" class="appeal-image-area" hidden>
+            <div class="appeal-glow" aria-hidden="true"></div>
+            <div class="appeal-sparkles" aria-hidden="true"></div>
+            <div class="appeal-stars" aria-hidden="true"></div>
+            <img id="appeal-image" class="appeal-image" src="" alt="" />
+          </div>
+        </div>
+
+        <div class="stage__preview" id="easy-guide" hidden>
+          <div class="preview-bar" id="preview-bar"></div>
+        </div>
+
+        <div class="stage__penlight">
+          <button class="rotate-button rotate-button--left" id="btn-right">
+            <span>◀︎</span>
           </button>
-          <button class="lang-switcher__btn" type="button" data-lang="en">
-            EN
+          <div class="penlight" id="penlight">
+            <div class="penlight__tube"></div>
+            <div class="penlight__ring"></div>
+            <div class="penlight__handle">
+              <div class="penlight__emblem"></div>
+              <div class="penlight__handle-cap"></div>
+            </div>
+          </div>
+          <button class="rotate-button rotate-button--right" id="btn-left">
+            <span>▶︎</span>
           </button>
-          <button class="lang-switcher__btn" type="button" data-lang="ko">
-            한국어
+          <div class="stage__toast" id="stage-toast-layer" aria-live="polite"></div>
+          <p class="penlight__label" id="penlight-label" data-i18n="penlight.off">
+            OFF
+          </p>
+        </div>
+
+        <div class="stage__footer">
+          <button class="cta-button cta-button--outline" id="btn-end" data-i18n="play.showResult">
+            終了する
+          </button>
+          <button class="cta-button cta-button--outline" id="btn-pause" data-i18n="play.pause">
+            中断する
           </button>
         </div>
-        <div class="hero__overlay"></div>
-        <h1 class="hero__title" data-i18n="hero.title">推しライト LIVE!!</h1>
-        <p class="hero__subtitle" data-i18n="hero.subtitle">
-          ペンライトを合わせて推しからレスをもらおう！
-        </p>
-      </header>
+      </section>
 
-      <main class="screen screen--top" id="screen-top">
-        <section class="top-actions">
-          <button class="cta-button" id="btn-start" data-i18n="top.start">
-            ゲームスタート
-          </button>
-          <button
-            class="cta-button cta-button--outline"
-            id="btn-howto"
-            data-i18n="top.howto"
-          >
-            操作説明
-          </button>
-          <button
-            class="cta-button cta-button--ghost"
-            id="btn-ranking"
-            data-i18n="top.ranking"
-          >
-            ランキングを見る（近日公開）
-          </button>
-        </section>
-
-        <section class="settings">
-          <h2 class="section-title" data-i18n="settings.title">難易度・設定</h2>
-          <div class="settings__group">
-            <label class="mode-card">
-              <input
-                type="radio"
-                name="mode"
-                value="easy"
-                class="mode-card__radio"
-                checked
-              />
-              <div class="mode-card__content">
-                <h3 data-i18n="mode.easy.title">🔰EASY</h3>
-                <p data-i18n="mode.easy.desc">+6点／色見本付き練習モード！</p>
-              </div>
-            </label>
-
-            <label class="mode-card">
-              <input
-                type="radio"
-                name="mode"
-                value="normal"
-                class="mode-card__radio"
-              />
-              <div class="mode-card__content">
-                <h3 data-i18n="mode.normal.title">⚡NORMAL</h3>
-                <p data-i18n="mode.normal.desc">+10点／色順を覚えてガチ勝負！</p>
-              </div>
-            </label>
-
-            <label class="mode-card">
-              <input
-                type="radio"
-                name="mode"
-                value="hard"
-                class="mode-card__radio"
-              />
-              <div class="mode-card__content">
-                <h3 data-i18n="mode.hard.title">🔥HARD</h3>
-                <p data-i18n="mode.hard.desc">+13点／ボタンの故障を乗り越え高得点を狙え！</p>
-              </div>
-            </label>
+      <section class="fever" id="fever" hidden>
+        <div class="fever__glow"></div>
+        <div class="fever__content">
+          <h2 data-i18n="fever.title">フィーバータイム！</h2>
+          <p class="fever__message" data-i18n="fever.message">
+            ペンライトをたくさん振って爆レスをもらおう！
+          </p>
+          <div class="fever__timer">
+            <span id="fever-time">10</span>
+            <small data-i18n="fever.timerUnit">sec</small>
           </div>
-        </section>
-
-        <section class="howto-modal" id="howto-modal" hidden>
-          <div class="howto-modal__backdrop"></div>
-          <div class="howto-modal__content">
-            <button class="modal-close" id="btn-close-howto">×</button>
-            <h2 class="howto-modal__title" data-i18n="howto.title">🎮 操作ガイド</h2>
-
-            <section class="howto-modal__section">
-              <h3 data-i18n="howto.section.basics.title">⭐ 基本操作</h3>
-              <ul class="howto-modal__list">
-                <li data-i18n="howto.section.basics.item1">・スタート後に「TARGET COLOR」を確認。</li>
-                <li data-i18n="howto.section.basics.item2">・左右ボタンでペンライトの色を切り替え、「TARGET COLOR」と一致させると得点が入ります。</li>
-                <li data-i18n="howto.section.basics.item3">・2秒以内に3回成功すると「アピールタイム」に突入します。</li>
-              </ul>
-            </section>
-
-            <section class="howto-modal__section">
-              <h3 data-i18n="howto.section.fever.title">⭐ アピールタイム</h3>
-              <ul class="howto-modal__list">
-                <li data-i18n="howto.section.fever.item1">・左右スワイプでペンライトを振ると10 回ごとに +10pt を獲得、さらに推しのレス演出もレベルアップします。</li>
-                <li data-i18n="howto.section.fever.item2">・アピールタイムは 10 秒間続き、その間メインタイマーは停止します。</li>
-                <li data-i18n="howto.section.fever.item3">・終了後は自動で通常モードに戻ります。</li>
-              </ul>
-            </section>
-
-            <section class="howto-modal__section">
-              <h3 data-i18n="howto.section.scoring.title">⭐ 通常モードの得点（1回成功ごと）</h3>
-              <ul class="howto-modal__list">
-                <li data-i18n="howto.section.scoring.item1">・EASY：+6pt</li>
-                <li data-i18n="howto.section.scoring.item2">・NORMAL：+10pt</li>
-                <li data-i18n="howto.section.scoring.item3">・HARD：+13pt</li>
-              </ul>
-            </section>
-          </div>
-        </section>
-      </main>
-
-      <main class="screen screen--play" id="screen-play" hidden>
-        <section class="hud">
-          <div class="hud__item">
-            <span class="hud__label" data-i18n="hud.scoreLabel">スコア</span>
-            <span class="hud__value" id="hud-score">0000</span>
-          </div>
-          <div class="hud__item hud__item--timer" id="hud-timer-item">
-            <span class="hud__label" data-i18n="hud.timeLabel">残り時間</span>
-            <span class="hud__value hud__value--time" id="hud-time">40</span>
-          </div>
-          <div class="hud__item">
-            <span class="hud__label" data-i18n="hud.successLabel">成功回数</span>
-            <span class="hud__value" id="hud-success">0</span>
-          </div>
-        </section>
-
-        <section class="stage">
-          <div class="stage__target">
-            <h2 data-i18n="target.title">TARGET COLOR</h2>
-            <div class="color-card" id="target-color">
-              <div class="color-card__swatch"></div>
-              <p class="color-card__name">RED</p>
+          <div class="fever__swipe-zone" id="fever-zone">
+            <div class="fever__swipe-text">
+              <p data-i18n="fever.swipe">左右にスワイプ！</p>
+              <span id="fever-count">0</span>
             </div>
-            <div id="appeal-image-area" class="appeal-image-area" hidden>
-              <div class="appeal-glow" aria-hidden="true"></div>
-              <div class="appeal-sparkles" aria-hidden="true"></div>
-              <div class="appeal-stars" aria-hidden="true"></div>
-              <img id="appeal-image" class="appeal-image" src="" alt="" />
-            </div>
-          </div>
-
-          <div class="stage__preview" id="easy-guide" hidden>
-            <div class="preview-bar" id="preview-bar"></div>
-          </div>
-
-          <div class="stage__penlight">
-            <button class="rotate-button rotate-button--left" id="btn-right">
-              <span>◀︎</span>
-            </button>
-            <div class="penlight" id="penlight">
-              <div class="penlight__tube"></div>
-              <div class="penlight__ring"></div>
-              <div class="penlight__handle">
-                <div class="penlight__emblem"></div>
-                <div class="penlight__handle-cap"></div>
+            <div class="fever__swipe-penlight">
+              <div class="fever__swipe-lane" aria-hidden="true">
+                <span class="fever__swipe-arrow fever__swipe-arrow--left">‹</span>
+                <div class="fever__swipe-track"></div>
+                <span class="fever__swipe-arrow fever__swipe-arrow--right">›</span>
               </div>
-            </div>
-            <button class="rotate-button rotate-button--right" id="btn-left">
-              <span>▶︎</span>
-            </button>
-            <div class="stage__toast" id="stage-toast-layer" aria-live="polite"></div>
-            <p class="penlight__label" id="penlight-label" data-i18n="penlight.off">
-              OFF
-            </p>
-          </div>
-
-          <div class="stage__footer">
-            <button
-              class="cta-button cta-button--outline"
-              id="btn-end"
-              data-i18n="play.showResult"
-            >
-              終了する
-            </button>
-            <button
-              class="cta-button cta-button--outline"
-              id="btn-pause"
-              data-i18n="play.pause"
-            >
-              中断する
-            </button>
-          </div>
-        </section>
-
-        <section class="fever" id="fever" hidden>
-          <div class="fever__glow"></div>
-          <div class="fever__content">
-            <h2 data-i18n="fever.title">フィーバータイム！</h2>
-            <p class="fever__message" data-i18n="fever.message">
-              ペンライトをたくさん振って爆レスをもらおう！
-            </p>
-            <div class="fever__timer">
-              <span id="fever-time">10</span>
-              <small data-i18n="fever.timerUnit">sec</small>
-            </div>
-            <div class="fever__swipe-zone" id="fever-zone">
-              <div class="fever__swipe-text">
-                <p data-i18n="fever.swipe">左右にスワイプ！</p>
-                <span id="fever-count">0</span>
-              </div>
-              <div class="fever__swipe-penlight">
-                <div class="fever__swipe-lane" aria-hidden="true">
-                  <span class="fever__swipe-arrow fever__swipe-arrow--left">‹</span>
-                  <div class="fever__swipe-track"></div>
-                  <span class="fever__swipe-arrow fever__swipe-arrow--right">›</span>
-                </div>
-                <div class="fever__particles" id="fever-particles" aria-hidden="true"></div>
-                <div class="penlight penlight--fever-mini penlight--off" id="fever-penlight" aria-hidden="true">
-                  <div class="penlight__tube"></div>
-                  <div class="penlight__ring"></div>
-                  <div class="penlight__handle">
-                    <div class="penlight__emblem"></div>
-                    <div class="penlight__handle-cap"></div>
-                  </div>
+              <div class="fever__particles" id="fever-particles" aria-hidden="true"></div>
+              <div class="penlight penlight--fever-mini penlight--off" id="fever-penlight" aria-hidden="true">
+                <div class="penlight__tube"></div>
+                <div class="penlight__ring"></div>
+                <div class="penlight__handle">
+                  <div class="penlight__emblem"></div>
+                  <div class="penlight__handle-cap"></div>
                 </div>
               </div>
             </div>
-            <div class="fever__stage" id="fever-stage">レス演出 Lv.1</div>
           </div>
-        </section>
-      </main>
+          <div class="fever__stage" id="fever-stage">レス演出 Lv.1</div>
+        </div>
+      </section>
+    </main>
 
-      <main class="screen screen--result" id="screen-result" hidden>
-        <section class="result-card" id="result-card">
-          <h2 data-i18n="result.title">ライブ結果</h2>
-          <div class="result-card__score">
-            <span class="label" data-i18n="result.scoreLabel">トータルスコア</span>
-            <span class="value" id="result-score">0</span>
+    <main class="screen screen--result" id="screen-result" hidden>
+      <section class="result-card" id="result-card">
+        <h2 data-i18n="result.title">ライブ結果</h2>
+        <div class="result-card__score">
+          <span class="label" data-i18n="result.scoreLabel">トータルスコア</span>
+          <span class="value" id="result-score">0</span>
+        </div>
+        <div class="result-card__level">
+          <span class="label" data-i18n="result.levelLabel">オタクレベル</span>
+          <span class="value" id="result-level">初心オタク</span>
+        </div>
+        <div class="result-card__stats">
+          <div>
+            <span class="label" data-i18n="result.successLabel">成功回数</span>
+            <span class="value" id="result-success">0</span>
           </div>
-          <div class="result-card__level">
-            <span class="label" data-i18n="result.levelLabel">オタクレベル</span>
-            <span class="value" id="result-level">初心オタク</span>
+          <div>
+            <span class="label" data-i18n="result.responsesLabel">レス獲得数</span>
+            <span class="value" id="result-responses">0</span>
           </div>
-          <div class="result-card__stats">
-            <div>
-              <span class="label" data-i18n="result.successLabel">成功回数</span>
-              <span class="value" id="result-success">0</span>
+        </div>
+        <div class="result-card__actions">
+          <button class="cta-button" id="btn-retry" data-i18n="play.retry">
+            もう一度プレイ
+          </button>
+          <button class="cta-button cta-button--outline" id="btn-show-register">
+            ランキングに登録
+          </button>
+          <button class="cta-button cta-button--outline" id="btn-top" data-i18n="play.toTop">
+            トップに戻る
+          </button>
+        </div>
+        <div class="share">
+          <button class="share__button" id="btn-share" data-i18n="share.button">
+            Xでシェア
+          </button>
+          <small data-i18n="share.note">※スクショを添付すると映えます！</small>
+        </div>
+      </section>
+
+      <section class="history">
+        <h3 data-i18n="history.title">最近のスコア</h3>
+        <ul class="history__list" id="history-list">
+          <li data-i18n="history.empty">初プレイを記録しよう！</li>
+        </ul>
+      </section>
+    </main>
+
+    <main class="screen screen--ranking" id="screen-ranking" hidden>
+      <section class="ranking-container">
+        <h2 class="section-title" data-i18n="ranking.title">🏆 ランキング</h2>
+
+        <div class="my-best-container" id="my-best-container" hidden>
+          <div class="my-best-label" data-i18n="ranking.yourBest">YOUR BEST</div>
+          <div class="my-best-card">
+            <div class="my-best-rank">
+              <span class="rank-value" id="my-best-rank">-</span>
+              <span class="rank-unit" data-i18n="ranking.rank">位</span>
             </div>
-            <div>
-              <span class="label" data-i18n="result.responsesLabel">レス獲得数</span>
-              <span class="value" id="result-responses">0</span>
+            <div class="my-best-info">
+              <div class="my-best-name" id="my-best-name">-</div>
+              <div class="my-best-level" id="my-best-level">-</div>
             </div>
+            <div class="my-best-score" id="my-best-score">-</div>
           </div>
-          <div class="result-card__actions">
-            <button class="cta-button" id="btn-retry" data-i18n="play.retry">
-              もう一度プレイ
-            </button>
-            <button
-              class="cta-button cta-button--outline"
-              id="btn-top"
-              data-i18n="play.toTop"
-            >
-              トップに戻る
-            </button>
-          </div>
-          <div class="share">
-            <button class="share__button" id="btn-share" data-i18n="share.button">
-              Xでシェア
-            </button>
-            <small data-i18n="share.note">※スクショを添付すると映えます！</small>
-          </div>
-        </section>
+        </div>
 
-        <section class="history">
-          <h3 data-i18n="history.title">最近のスコア</h3>
-          <ul class="history__list" id="history-list">
-            <li data-i18n="history.empty">初プレイを記録しよう！</li>
-          </ul>
-        </section>
-      </main>
+        <div class="ranking-list" id="ranking-list">
+          <!-- Ranking items will be injected here -->
+        </div>
+        <div class="ranking-actions">
+          <button class="cta-button cta-button--outline" id="btn-ranking-back" data-i18n="ranking.backToTop">
+            トップに戻る
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="transition-overlay transition-overlay--result" id="transition-result" hidden>
+    <div class="transition-overlay__content">
+      <div class="transition-overlay__burst"></div>
+      <div class="transition-overlay__sparkle"></div>
+      <h2 class="transition-overlay__title">
+        <span data-i18n="transition.resultTitle">RESULT!!</span>
+      </h2>
+      <p class="transition-overlay__subtitle">
+        <span data-i18n="transition.resultSubtitle">loading highlights...</span>
+      </p>
     </div>
+  </div>
 
-    <div class="transition-overlay transition-overlay--result" id="transition-result" hidden>
-      <div class="transition-overlay__content">
-        <div class="transition-overlay__burst"></div>
-        <div class="transition-overlay__sparkle"></div>
-        <h2 class="transition-overlay__title">
-          <span data-i18n="transition.resultTitle">RESULT!!</span>
-        </h2>
-        <p class="transition-overlay__subtitle">
-          <span data-i18n="transition.resultSubtitle">loading highlights...</span>
-        </p>
-      </div>
+  <section class="howto-modal" id="ranking-register-modal" hidden>
+    <div class="howto-modal__backdrop"></div>
+    <div class="howto-modal__content ranking-modal-content">
+      <button class="modal-close" id="btn-close-register">×</button>
+      <h2 class="howto-modal__title" data-i18n="ranking.register.title">ランキング登録</h2>
+      <p class="ranking-modal-score"><span data-i18n="ranking.register.scoreLabel">スコア:</span> <span
+          id="register-score-display">0</span></p>
+
+      <form id="ranking-register-form" class="ranking-form">
+        <div class="form-group">
+          <label for="input-nickname" data-i18n="ranking.register.nicknameLabel">ニックネーム (必須)</label>
+          <input type="text" id="input-nickname" required maxlength="10" placeholder="10文字以内" class="ranking-input">
+          <div class="validation-message" id="nickname-validation"></div>
+        </div>
+        <div class="form-group">
+          <label for="input-xid" data-i18n="ranking.register.xIdLabel">X (Twitter) ID (任意)</label>
+          <div class="input-with-prefix">
+            <span>@</span>
+            <input type="text" id="input-xid" placeholder="IDのみ入力" class="ranking-input">
+          </div>
+        </div>
+        <button type="submit" class="cta-button" id="btn-submit-ranking"
+          data-i18n="ranking.register.submit">登録する</button>
+      </form>
     </div>
+  </section>
 
-    <script type="module" src="/app.js"></script>
-  </body>
+  <script type="module" src="/app.js"></script>
+</body>
+
 </html>
-

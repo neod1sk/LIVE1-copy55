@@ -29,6 +29,9 @@ import {
 } from "./src/audio/audioManager.js";
 import { flashTargetCard, flashHudValues } from "./src/ui/effects.js";
 import { bindTapSafeActivation } from "./src/input/touch.js";
+import { RankingUI } from "./src/ranking/rankingUI.js";
+
+let rankingUI;
 
 const colors = PENLIGHT_COLORS;
 const levelTable = LEVEL_TABLE;
@@ -166,6 +169,7 @@ const screens = {
   top: document.getElementById("screen-top"),
   play: document.getElementById("screen-play"),
   result: document.getElementById("screen-result"),
+  ranking: document.getElementById("screen-ranking"),
   langSwitcher: document.getElementById("lang-switcher"),
   hero: document.querySelector(".hero"),
   transition: document.getElementById("transition-result"),
@@ -181,6 +185,7 @@ const screens = {
     this.top.hidden = false;
     this.play.hidden = true;
     this.result.hidden = true;
+    if (this.ranking) this.ranking.hidden = true;
     if (this.langSwitcher) {
       this.langSwitcher.hidden = false;
     }
@@ -201,6 +206,7 @@ const screens = {
     this.top.hidden = true;
     this.play.hidden = false;
     this.result.hidden = true;
+    if (this.ranking) this.ranking.hidden = true;
     if (this.langSwitcher) {
       this.langSwitcher.hidden = true;
     }
@@ -221,6 +227,7 @@ const screens = {
     this.top.hidden = true;
     this.play.hidden = true;
     this.result.hidden = false;
+    if (this.ranking) this.ranking.hidden = true;
     if (this.langSwitcher) {
       this.langSwitcher.hidden = false;
     }
@@ -241,6 +248,7 @@ const screens = {
     this.top.hidden = true;
     this.play.hidden = true;
     this.result.hidden = true;
+    if (this.ranking) this.ranking.hidden = true;
     if (this.transition) {
       this.transition.hidden = false;
     }
@@ -248,6 +256,30 @@ const screens = {
   hideTransition() {
     if (this.transition) {
       this.transition.hidden = true;
+    }
+  },
+  showRanking() {
+    setHeroInteractive(true);
+    this.unlockScroll();
+    this.top.hidden = true;
+    this.play.hidden = true;
+    this.result.hidden = true;
+    if (this.ranking) this.ranking.hidden = false;
+    if (this.langSwitcher) {
+      this.langSwitcher.hidden = false;
+    }
+    if (this.hero) {
+      this.hero.hidden = false;
+    }
+    this.hideTransition();
+    if (isBgmUnlocked()) {
+      playMenuBgm();
+    }
+    if (bgmToggleButton) {
+      bgmToggleButton.hidden = false;
+    }
+    if (rankingUI) {
+      rankingUI.showRanking();
     }
   },
 };
@@ -456,15 +488,16 @@ const enqueueRender = (state, { force = false } = {}) => {
 const bgmToggleButton = document.getElementById("toggleBgmBtn");
 
 const isResultScreenActive = () => screens && screens.result && !screens.result.hidden;
+const isRankingScreenActive = () => screens && screens.ranking && !screens.ranking.hidden;
 
 const handleHeroClick = () => {
-  if (!isResultScreenActive()) return;
+  if (!isResultScreenActive() && !isRankingScreenActive()) return;
   playButtonSfx();
   screens.showTop();
 };
 
 const handleHeroKeydown = (event) => {
-  if (!isResultScreenActive()) return;
+  if (!isResultScreenActive() && !isRankingScreenActive()) return;
   if (event.key === "Enter" || event.key === " ") {
     event.preventDefault();
     playButtonSfx();
@@ -791,19 +824,19 @@ function updateUI(state, { force = false } = {}) {
         }
         appealImage.alt = t("fever.stage", { level: stageLevel });
         appealImageArea.hidden = false;
-      appealImageArea.classList.add("is-visible");
-      appealImageArea.classList.remove("is-flash");
-      requestAnimationFrame(() => {
-        appealImageArea.classList.add("is-flash");
-      });
+        appealImageArea.classList.add("is-visible");
+        appealImageArea.classList.remove("is-flash");
+        requestAnimationFrame(() => {
+          appealImageArea.classList.add("is-flash");
+        });
         const stars = appealImageArea.querySelector(".appeal-stars");
         if (stageLevel >= 4) {
           appealImageArea.classList.add("is-epic");
           if (stars) {
             stars.classList.remove("is-bursting");
-          requestAnimationFrame(() => {
-            stars.classList.add("is-bursting");
-          });
+            requestAnimationFrame(() => {
+              stars.classList.add("is-bursting");
+            });
           }
         } else {
           appealImageArea.classList.remove("is-epic");
@@ -940,10 +973,10 @@ function updateLangButtons() {
       btn.dataset.lang === "ja"
         ? "🇯🇵"
         : btn.dataset.lang === "en"
-        ? "🇺🇸"
-        : btn.dataset.lang === "ko"
-        ? "🇰🇷"
-        : btn.textContent;
+          ? "🇺🇸"
+          : btn.dataset.lang === "ko"
+            ? "🇰🇷"
+            : btn.textContent;
     btn.textContent = flag;
   });
 }
@@ -975,6 +1008,9 @@ function changeLanguage(lang) {
   restoreHistory();
   if (game && game.state) {
     enqueueRender(game.state, { force: true });
+  }
+  if (rankingUI && !rankingUI.rankingScreen.hidden) {
+    rankingUI.refreshRanking();
   }
 }
 
@@ -1072,7 +1108,21 @@ function attachEventListeners() {
   if (btnRanking) {
     btnRanking.addEventListener("click", () => {
       playMainSfx();
-      showToast(t("top.ranking"), "success");
+      screens.showRanking();
+    });
+  }
+  const btnShowRegister = document.getElementById("btn-show-register");
+  if (btnShowRegister) {
+    btnShowRegister.addEventListener("click", () => {
+      playMainSfx();
+      if (rankingUI) rankingUI.showRegisterModal(game.state.score);
+    });
+  }
+  const btnRankingBack = document.getElementById("btn-ranking-back");
+  if (btnRankingBack) {
+    btnRankingBack.addEventListener("click", () => {
+      playMainSfx();
+      screens.showTop();
     });
   }
   const modeRadios = document.querySelectorAll('input[name="mode"]');
@@ -1101,8 +1151,8 @@ function attachEventListeners() {
     bindTapSafeActivation(
       pauseButton,
       () => {
-      playPauseSfx();
-      game.togglePause();
+        playPauseSfx();
+        game.togglePause();
       },
       { resumeAudio: resumeAudioContext }
     );
@@ -1164,6 +1214,13 @@ function mountStore() {
 
 function init() {
   initUI();
+  rankingUI = new RankingUI(() => {
+    screens.showRanking();
+  });
+  // Inject translator
+  if (rankingUI) {
+    rankingUI.setTranslator(t, getLanguage);
+  }
   langButtons = Array.from(document.querySelectorAll("[data-lang]"));
   initAudio({ toggleButton: bgmToggleButton });
   changeLanguage(getLanguage());
